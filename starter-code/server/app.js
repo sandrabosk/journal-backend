@@ -7,12 +7,20 @@ const bodyParser   = require('body-parser');
 const layouts      = require('express-ejs-layouts');
 const mongoose     = require('mongoose');
 const cors         = require('cors');
+var session = require('express-session');
+var passport = require('passport');
+
+require('dotenv').config();
+// cloudinary set up
+require("./config/cloudinary");
+// passport set up
+require('./config/passport-config');
 
 mongoose.connect('mongodb://localhost/journal-development');
 
 const app = express();
 
-app.use(cors());
+// app.use(cors());
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -29,28 +37,38 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(layouts);
 
+// add session stuff
+app.use(session({
+  secret:"some secret goes here",
+  resave: true,
+  saveUninitialized: true
+}));
+// add passport stuff
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+app.use(
+  cors({
+    credentials: true,                 // allow other domains to send cookies
+    origin: ["http://localhost:4200"]  // these are the domains that are allowed
+  })
+);
+
+
+
 const index = require('./routes/index');
 app.use('/', index);
 
-app.all('/*', function (req, res) {
-  res.sendfile(__dirname + '/public/index.html');
-});
-// catch 404 and forward to error handler
+const apiRoutes = require('./routes/api/journal-entries');
+app.use('/api', apiRoutes);
+
+const authRoutes = require('./routes/user/auth-routes');
+app.use('/api', authRoutes);
+
 app.use((req, res, next) => {
-  const err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
-
-// error handler
-app.use((err, req, res, next) => {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+  // If no routes match, send them the Angular HTML.
+  res.sendFile(__dirname + "/public/index.html");
 });
 
 module.exports = app;

@@ -1,5 +1,9 @@
 const express       = require('express');
 const router        = express.Router();
+
+const cloudinary = require('cloudinary');
+const uploadCloud = require('../../config/cloudinary');
+
 const Entry         = require('../../models/journal-entry');
 
 router.get('/journal-entries', (req, res, next) => {
@@ -19,16 +23,35 @@ router.get('/journal-entries/:id', (req, res, next) => {
   });
 });
 
-router.post('/journal-entries', (req, res, next) => {
+router.post('/journal-entries', uploadCloud.single('img'), (req, res, next) => {
+  
+console.log('here', req.body);
+console.log('files ======= :', req.file)
+
   const newEntry = new Entry({
     title: req.body.title,
-    content: req.body.content
+    content: req.body.content,
+    // image: []
   });
 
+  if(req.file){
+    newEntry.image = req.file.url;
+      // const theImages = req.files;
+      // theImages.forEach(eachImg =>{
+      //     console.log("each image:", eachImg);
+      //     newEntry.image.push(eachImg.url);
+      // });
+  }
+
   newEntry.save( (err) => {
-    if (err)             { return res.status(500).json(err) }
-    if (newEntry.errors) { return res.status(400).json(newEntry) }
-                           return res.json(newEntry);
+    if (err)             { 
+      return res.status(500).json(err) 
+    }
+    if (newEntry.errors) { 
+      return res.status(400).json(newEntry) 
+    }
+    
+    return res.json(newEntry);
   });
 });
 

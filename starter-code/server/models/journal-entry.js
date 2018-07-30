@@ -13,7 +13,8 @@ const EntrySchema = new Schema({
   date: {
     type: Date,
     default: Date.now
-  }
+  },
+  image: {type: String}
 });
 
 module.exports = mongoose.model('JournalEntry', EntrySchema);

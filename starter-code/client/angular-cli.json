@@ -21,8 +21,8 @@
         "styles.css"
       ],
       "scripts": [],
-      "environmentSource": "environments/environment.ts",
       "environments": {
+        "source": "environments/environment.ts",
         "dev": "environments/environment.ts",
         "prod": "environments/environment.prod.ts"
       }
@@ -57,11 +57,11 @@
     },
     "spec": {
       "class": false,
-      "component": false,
-      "directive": false,
+      "component": true,
+      "directive": true,
       "module": false,
-      "pipe": false,
-      "service": false
+      "pipe": true,
+      "service": true
     }
   }
 }
