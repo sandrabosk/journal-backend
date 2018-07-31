@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const Schema   = mongoose.Schema;
+const User = require('./user-model');
 
-const EntrySchema = new Schema({
+const entrySchema = new Schema({
   title: {
     type: String,
     required: [true, "Title is required"]
@@ -14,7 +15,12 @@ const EntrySchema = new Schema({
     type: Date,
     default: Date.now
   },
-  image: {type: String}
+  image: {
+    type: String
+  },
+  creator: { 
+    type: Schema.Types.ObjectId, ref: "User" 
+  }
 });
 
-module.exports = mongoose.model('JournalEntry', EntrySchema);
+module.exports = mongoose.model('JournalEntry', entrySchema);

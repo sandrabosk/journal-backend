@@ -15,23 +15,24 @@ router.get('/journal-entries', (req, res, next) => {
 });
 
 router.get('/journal-entries/:id', (req, res, next) => {
-  Entry.findById(req.params.id, (err, entry) => {
-    if (err)    { return res.json(err).status(500); }
-    if (!entry) { return res.json(err).status(404); }
-
-    return res.json(entry);
-  });
+  Entry.findById(req.params.id)
+  .populate('creator', { encryptedPassword: 0 })
+  .then( foundEntry => {
+    res.status(200).json(foundEntry);
+  } )
+  .catch( err => next(err) )
+ 
 });
 
 router.post('/journal-entries', uploadCloud.single('img'), (req, res, next) => {
   
-console.log('here', req.body);
-console.log('files ======= :', req.file)
+// console.log('here', req.body);
+// console.log('files ======= :', req.file)
 
   const newEntry = new Entry({
     title: req.body.title,
     content: req.body.content,
-    // image: []
+    creator: req.user._id
   });
 
   if(req.file){
@@ -54,5 +55,22 @@ console.log('files ======= :', req.file)
     return res.json(newEntry);
   });
 });
+
+
+
+
+// router.post('/journal-entries/:id/add-wisdom', (req, res, next) => {
+//   const wisdom = req.body.theWisdom;
+//   Entry.findById(req.params.id)
+//   .then( foundEntry => {
+//     foundEntry.wisdoms.push(wisdom);
+//     foundEntry.save()
+//     .then( savedEntry => res.status(200).json(savedEntry) )
+//     .catch( err => next(err) );
+//   })
+//   .catch( err => next(err) );
+
+// })
+
 
 module.exports = router;

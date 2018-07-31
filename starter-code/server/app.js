@@ -7,8 +7,8 @@ const bodyParser   = require('body-parser');
 const layouts      = require('express-ejs-layouts');
 const mongoose     = require('mongoose');
 const cors         = require('cors');
-var session = require('express-session');
-var passport = require('passport');
+var session        = require('express-session');
+var passport       = require('passport');
 
 require('dotenv').config();
 // cloudinary set up

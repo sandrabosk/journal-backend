@@ -10,6 +10,7 @@ import { OneEntryDetailComponent } from './components/one-entry-detail/one-entry
 import { NewEntryComponent } from './components/new-entry/new-entry.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { LoginComponent } from './components/login/login.component';
+import { AllUsersComponent } from './components/all-users/all-users.component';
 
 // services:
 import { JournalService } from './services/journal.service';
@@ -54,7 +55,8 @@ const routes: Routes = [
     OneEntryDetailComponent,
     NewEntryComponent,
     SignupComponent,
-    LoginComponent
+    LoginComponent,
+    AllUsersComponent,
   ],
   imports: [
     BrowserModule,
