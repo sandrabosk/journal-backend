@@ -1,0 +1,18 @@
+<div *ngIf="!theUser.username" >
+    Not logged in!
+  </div>
+
+<div *ngIf="theUser.username" >
+  Welcome, {{ theUser.username}}!
+  <button (click)="logMeOutPls()"> Log Out </button>
+  <p *ngIf="logoutError">
+      {{ logoutError }}
+    </p>
+</div>
+
+
+<div>
+  <ul *ngFor="let oneEntry of allTheEntries">
+    <li><a [routerLink]="['/',oneEntry._id]">{{ oneEntry.title }}</a></li>
+  </ul>
+</div>

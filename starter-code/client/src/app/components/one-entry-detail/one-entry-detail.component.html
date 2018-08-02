@@ -1,0 +1,26 @@
+<div>
+  User is: {{ currentUser.username }}
+</div>
+
+
+<div>
+  <h1>{{ entry.title }}</h1> by {{ creator.username }}
+  <hr>
+  <p>{{ entry.content }}</p>
+  <p>image:</p>
+  <img [src]="entry.image" alt="" width="300" height="300">
+</div>
+
+<div>
+  Allowed users:
+  <p *ngFor="let oneApproved of approvedUsers" >
+    {{ oneApproved.username }}
+  </p>
+</div>
+
+
+<a [routerLink]="['/']">Go back to list</a>
+<hr>
+
+<!-- <app-wisdom [passedEntry] = "entry"></app-wisdom> -->
+<app-all-users (onAddUser)="addTheUser($event)"></app-all-users>
